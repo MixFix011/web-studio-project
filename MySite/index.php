@@ -1,31 +1,16 @@
 ﻿<?php
 include 'config.php';
-$result = $db->query("SELECT * FROM services WHERE is_active=1 ORDER BY sort_order ASC, id ASC LIMIT 9");
+
+$result = $db->query("SELECT * FROM services WHERE is_active=1 ORDER BY sort_order ASC, id ASC");
 $services = [];
 while ($row = $result->fetch_assoc()) {
     $services[] = $row;
 }
-if (empty($services)) {
-    $services = [
-        ['icon'=>'bi-brush', 'title'=>'Веб-дизайн', 'description'=>'Современный дизайн', 'price'=>25000, 'duration'=>5],
-        ['icon'=>'bi-code-slash', 'title'=>'Разработка', 'description'=>'Быстрая верстка', 'price'=>30000, 'duration'=>7],
-        ['icon'=>'bi-graph-up-arrow', 'title'=>'SEO', 'description'=>'ТОП поисковиков', 'price'=>15000, 'duration'=>30],
-        ['icon'=>'bi-headset', 'title'=>'Поддержка', 'description'=>'24/7 помощь', 'price'=>5000, 'duration'=>30],
-        ['icon'=>'bi-image', 'title'=>'Логотипы', 'description'=>'Уникальный стиль', 'price'=>15000, 'duration'=>3]
-    ];
-}
 
-$result_portfolio = $db->query("SELECT * FROM portfolio WHERE is_active = 1 ORDER BY id DESC LIMIT 9");
+$result_portfolio = $db->query("SELECT * FROM portfolio WHERE is_active = 1 ORDER BY id DESC");
 $portfolio_items = [];
 while ($row = $result_portfolio->fetch_assoc()) {
     $portfolio_items[] = $row;
-}
-if (empty($portfolio_items)) {
-    $portfolio_items = [
-        ['image' => 'Image/Corp_primer.png','customer' => 'Корпоративный сайт','description' => 'Ярославль 2025','site_type' => 'Сайт-визитка','deadline' => 14],
-        ['image' => 'Image/Mag_primer.png','customer' => 'Интернет-магазин','description' => 'SEO продвижение','site_type' => 'Интернет-магазин','deadline' => 30],
-        ['image' => 'Image/Lending_primer.png','customer' => 'Лендинг','description' => 'Высокая конверсия','site_type' => 'Лендинг','deadline' => 7]
-    ];
 }
 ?>
 <!DOCTYPE html>
@@ -38,124 +23,101 @@ if (empty($portfolio_items)) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .carousel-control-prev, .carousel-control-next {
+            width: 8%;
+            opacity: 0.7;
+        }
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            padding: 20px;
+            background-size: 50%;
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero .lead { font-size: 1.2rem !important; }
+        }
+    </style>
 </head>
 <body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var myCarousel = document.querySelector('#servicesCarousel');
-            if (myCarousel) {
-                var carousel = new bootstrap.Carousel(myCarousel, {interval: 4000, wrap: true, pause: false});
-            }
 
-            var portfolioCarousel = document.querySelector('#portfolioCarousel');
-            if (portfolioCarousel) {
-                var carousel2 = new bootstrap.Carousel(portfolioCarousel, {interval: 4000, wrap: true, pause: false});
-            }
-        });
-    </script>
-
-    <br>
-
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#about">
-                <img src="Image/CR.png" alt="SR-Studio" class="me-2">
-                <span class="fw-bold fs-4">SR</span><span class="fs-5">Studio</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link px-3 py-2" href="services.php">Услуги</a></li>
-                    <li class="nav-item"><a class="nav-link px-3 py-2" href="portfolio.php">Портфолио</a></li>
-                    <li class="nav-item"><a class="nav-link px-3 py-2" href="about.html">О нас</a></li>
-                    <li class="nav-item"><a class="nav-link px-3 py-2" href="reviews.php">Отзывы</a></li>
-                    <li class="nav-item"><a class="nav-link px-3 py-2" href="register.php">Заявка</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <section class="hero pt-5" id="about">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-7">
-                    <h1 class="mb-5">Создаем <span class="text-warning">современные</span><br>сайты для вашего бизнеса</h1>
-                    <p class="lead fs-3 mb-4">Веб-студия в Ярославле. Дизайн • Разработка • SEO-продвижение • Поддержка</p>
-                    <div class="d-flex flex-wrap gap-3">
-                        <a href="#services" class="btn btn-modern btn-lg">Посмотреть услуги</a>
-                        <a href="#portfolio" class="btn btn-modern btn-lg">Посмотреть проекты</a>
-                    </div>
-                </div>
-                <div class="col-lg-5 text-center d-none d-lg-block">
-                    <img src="Image/CR.png" alt="SR-Studio" class="img-fluid shadow-lg rounded-4" style="max-height:250px;">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="stats py-5">
-    <h2 class="visually-hidden">Наши достижения</h2>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
-        <div class="row text-center g-4">
-            <div class="col-lg-3 col-md-6">
-                <div class="p-4">
-                    <span class="stat-number d-block mb-3">+150</span>
-                    <div class="h5 fw-bold">сайтов создано</div>
+        <a class="navbar-brand d-flex align-items-center" href="#about">
+            <img src="Image/CR.png" alt="SR-Studio" class="me-2" style="height: 40px;">
+            <span class="fw-bold fs-4">SR</span><span class="fs-5">Studio</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link px-3 py-2" href="services.php">Услуги</a></li>
+                <li class="nav-item"><a class="nav-link px-3 py-2" href="portfolio.php">Портфолио</a></li>
+                <li class="nav-item"><a class="nav-link px-3 py-2" href="about.html">О нас</a></li>
+                <li class="nav-item"><a class="nav-link px-3 py-2" href="reviews.php">Отзывы</a></li>
+                <li class="nav-item"><a class="nav-link px-3 py-2" href="register.php">Заявка</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="hero pt-5" id="about">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="mb-5">Создаем <span class="text-warning">современные</span><br>сайты для вашего бизнеса</h1>
+                <p class="lead fs-3 mb-4">Веб-студия в Ярославле. Дизайн • Разработка • SEO-продвижение • Поддержка</p>
+                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                    <a href="#services" class="btn btn-modern btn-lg" style="width: 100%; display: flex; justify-content: center;">Посмотреть услуги</a>
+                    <a href="#portfolio" class="btn btn-modern btn-lg" style="width: 100%; display: flex; justify-content: center;">Посмотреть проекты</a>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="p-4">
-                    <span class="stat-number d-block mb-3">95%</span>
-                    <div class="h5 fw-bold">довольных клиентов</div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="p-4">
-                    <span class="stat-number d-block mb-3">2 мес</span>
-                    <div class="h5 fw-bold">ТОП-10 Яндекс</div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="p-4">
-                    <span class="stat-number d-block mb-3">24/7</span>
-                    <div class="h5 fw-bold">поддержка</div>
-                </div>
+            <div class="col-lg-5 text-center d-none d-lg-block">
+                <img src="Image/CR.png" alt="SR-Studio" class="img-fluid shadow-lg rounded-4" style="max-height:250px;">
             </div>
         </div>
     </div>
 </section>
 
+<section class="stats py-5">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-lg-3 col-md-6"><div class="p-4"><span class="stat-number d-block mb-3">+150</span><div class="h5 fw-bold">сайтов создано</div></div></div>
+            <div class="col-lg-3 col-md-6"><div class="p-4"><span class="stat-number d-block mb-3">95%</span><div class="h5 fw-bold">довольных клиентов</div></div></div>
+            <div class="col-lg-3 col-md-6"><div class="p-4"><span class="stat-number d-block mb-3">2 мес</span><div class="h5 fw-bold">ТОП-10 Яндекс</div></div></div>
+            <div class="col-lg-3 col-md-6"><div class="p-4"><span class="stat-number d-block mb-3">24/7</span><div class="h5 fw-bold">поддержка</div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- УСЛУГИ - СЛАЙДЕР (на ПК 3 карточки, на телефоне 1) -->
 <section class="services py-5" id="services">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 text-center mb-5">
-                <h2 class="display-6 fw-bold mb-4">Наши услуги</h2>
-                <p class="lead fs-5">Создаем сайты которые работают на результат</p>
-            </div>
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold mb-4">Наши услуги</h2>
+            <p class="lead fs-5">Создаем сайты которые работают на результат</p>
         </div>
 
-        <div id="servicesCarousel" class="carousel slide col-lg-9 mx-auto mb-4" data-bs-ride="carousel" data-bs-interval="4000" data-bs-wrap="true">
+        <div id="servicesCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
             <div class="carousel-inner">
                 <?php
-                $chunks_s = array_chunk($services, 3);
-                foreach ($chunks_s as $index => $chunk):
+                // Разбиваем услуги на группы по 3 для ПК (телефон через CSS покажет по 1)
+                $chunks = array_chunk($services, 3);
+                foreach ($chunks as $index => $chunk):
                 ?>
                 <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
-                    <div class="row g-3 justify-content-center">
+                    <div class="row g-4 justify-content-center">
                         <?php foreach ($chunk as $service): ?>
-                        <div class="col-md-4">
-                            <div class="service-card h-100 text-center p-4 border rounded shadow-sm hover-lift">
+                        <div class="col-12 col-md-4">
+                            <div class="service-card text-center p-4 border rounded shadow-sm h-100">
                                 <i class="bi <?php echo htmlspecialchars($service['icon']); ?> fs-1 text-primary mb-3"></i>
                                 <h3 class="h5 fw-bold mb-2"><?php echo htmlspecialchars($service['title']); ?></h3>
-                                <p class="small mb-3 text-muted">
-                                    <?php echo htmlspecialchars(substr($service['description'], 0, 60)); ?>...
-                                </p>
-                                <div class="mt-auto d-flex justify-content-center gap-2">
-                                    <small class="badge bg-primary me-1"><?php echo number_format($service['price']/1000, 0); ?>K ₽</small>
-                                    <small class="badge bg-success"><?php echo $service['duration']; ?>д</small>
+                                <p class="small text-muted" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;"><?php echo htmlspecialchars($service['description']); ?></p>
+                                <div class="mt-3">
+                                    <span class="badge bg-primary"><?php echo number_format($service['price']/1000, 0); ?>K ₽</span>
+                                    <span class="badge bg-success"><?php echo $service['duration']; ?>д</span>
                                 </div>
                             </div>
                         </div>
@@ -164,24 +126,25 @@ if (empty($portfolio_items)) {
                 </div>
                 <?php endforeach; ?>
             </div>
-            <div class="carousel-indicators">
-                <?php foreach ($chunks_s as $index => $chunk): ?>
-                <button type="button" data-bs-target="#servicesCarousel" data-bs-slide-to="<?php echo $index; ?>" class="<?php echo $index === 0 ? 'active' : ''; ?>" aria-label="Слайд <?php echo $index+1; ?>"></button>
-                <?php endforeach; ?>
-            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#servicesCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#servicesCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
         </div>
     </div>
 </section>
+
+<!-- ПОРТФОЛИО - СЛАЙДЕР (на ПК 3 карточки, на телефоне 1) -->
 <section class="portfolio py-5" id="portfolio">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 text-center mb-5">
-                <h2 class="display-5 fw-bold mb-4">Портфолио</h2>
-                <p class="lead">Реальные проекты для реальных клиентов</p>
-            </div>
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-4">Портфолио</h2>
+            <p class="lead">Реальные проекты для реальных клиентов</p>
         </div>
 
-        <div id="portfolioCarousel" class="carousel slide col-lg-9 mx-auto mb-4" data-bs-ride="carousel" data-bs-interval="4000" data-bs-wrap="true">
+        <div id="portfolioCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
             <div class="carousel-inner">
                 <?php
                 $chunks_p = array_chunk($portfolio_items, 3);
@@ -190,12 +153,12 @@ if (empty($portfolio_items)) {
                 <div class="carousel-item <?php echo $idx === 0 ? 'active' : ''; ?>">
                     <div class="row g-4 justify-content-center">
                         <?php foreach ($chunk as $item): ?>
-                        <div class="col-md-4">
-                            <div class="portfolio-item h-100 border rounded shadow-sm p-3 d-flex flex-column">
-                                <img src="Image/<?php echo htmlspecialchars($item['image']); ?>" class="img-fluid w-100" style="height: 150px; object-fit: cover;" alt="<?php echo htmlspecialchars($item['customer']); ?>" onerror="this.src='Image/Corp_primer.png'">
-                                <div class="mt-3 flex-grow-1 d-flex flex-column">
+                        <div class="col-12 col-md-4">
+                            <div class="portfolio-item border rounded shadow-sm p-3 h-100">
+                                <img src="Image/<?php echo htmlspecialchars($item['image']); ?>" class="img-fluid w-100" style="height: 180px; object-fit: cover; border-radius: 12px;" alt="<?php echo htmlspecialchars($item['customer']); ?>" onerror="this.src='Image/CR.png'">
+                                <div class="mt-3">
                                     <h3 class="h5 fw-bold mb-1"><?php echo htmlspecialchars($item['customer']); ?></h3>
-                                    <p class="mb-1 small text-muted"><?php echo htmlspecialchars($item['site_type']); ?></p>
+                                    <p class="small text-muted"><?php echo htmlspecialchars($item['site_type']); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -204,74 +167,67 @@ if (empty($portfolio_items)) {
                 </div>
                 <?php endforeach; ?>
             </div>
-            <div class="carousel-indicators">
-                <?php foreach ($chunks_p as $idx => $chunk): ?>
-                <button type="button" data-bs-target="#portfolioCarousel" data-bs-slide-to="<?php echo $idx; ?>" class="<?php echo $idx === 0 ? 'active' : ''; ?>" aria-label="Проекты <?php echo $idx + 1; ?>"></button>
-                <?php endforeach; ?>
-            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#portfolioCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#portfolioCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
         </div>
 
-        <a href="portfolio.php" class="btn w-100 but">Посмотреть больше наших проектов</a>
+        <div class="text-center mt-4">
+            <a href="portfolio.php" class="btn btn-modern">Посмотреть больше проектов</a>
+        </div>
     </div>
 </section>
+
+<!-- ОТЗЫВЫ - СЛАЙДЕР -->
 <section class="reviews py-5" id="reviews">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 text-center mb-5">
-                <h2 class="display-5 fw-bold mb-4">Что говорят клиенты</h2>
-            </div>
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-4">Что говорят клиенты</h2>
+            <p class="lead">Реальные отзывы наших клиентов</p>
         </div>
-        <div class="row justify-content-center g-4">
-            <div class="col-lg-4 col-md-6">
-                <div class="review-card text-center shadow-sm p-4 h-100 d-flex flex-column">
-                    <div class="mb-4">
-                        <i class="bi bi-star-fill text-warning"></i>
-                        <i class="bi bi-star-fill text-warning"></i>
-                        <i class="bi bi-star-fill text-warning"></i>
-                        <i class="bi bi-star-fill text-warning"></i>
-                        <i class="bi bi-star-fill text-warning"></i>
-                    </div>
-                    <p class="mb-4 flex-grow-1">
-                        "Отличная работа! Сайт вышел современным и быстрым. Клиенты пошли сразу"
-                    </p>
-                    <hr class="text-muted opacity-25">
-                    <h3 class="h6 fw-bold mb-0">Иван Петров, директор</h3>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="review-card text-center shadow-sm p-4 h-100 d-flex flex-column">
-                    <div class="mb-4">
-                        <i class="bi bi-star-fill text-warning"></i>
-                        <i class="bi bi-star-fill text-warning"></i>
-                        <i class="bi bi-star-fill text-warning"></i>
-                        <i class="bi bi-star-fill text-warning"></i>
-                        <i class="bi bi-star-fill text-warning"></i>
-                    </div>
-                    <p class="mb-4 flex-grow-1">"SEO продвижение на высоте. За 2 месяца в топ-10 Яндекса!"</p>
-                    <hr class="text-muted opacity-25">
-                    <h3 class="h6 fw-bold mb-0">Мария Сидорова, маркетолог</h3>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="review-card text-center shadow-sm p-4 h-100 d-flex flex-column">
-                    <div class="mb-4">
-                        <i class="bi bi-star-fill text-warning"></i>
-                        <i class="bi bi-star-fill text-warning"></i>
-                        <i class="bi bi-star-fill text-warning"></i>
-                        <i class="bi bi-star-fill text-warning"></i>
-                        <i class="bi bi-star-fill text-warning"></i>
-                    </div>
-                    <p class="mb-4 flex-grow-1">
-                        "Профессиональный подход и четкое соблюдение сроков. Рекомендую!"
-                    </p>
-                    <div class="mt-auto">
-                        <hr class="my-3 opacity-25">
-                        <h3 class="h6 fw-bold mb-0">Алексей Смирнов, владелец бизнеса</h3>
+
+        <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-inner">
+                <?php
+                $reviews_main = $db->query("SELECT * FROM otzyvy WHERE is_active = 1 ORDER BY id DESC");
+                $reviews_chunks = array_chunk($reviews_main->fetch_all(MYSQLI_ASSOC), 3);
+                foreach ($reviews_chunks as $ridx => $rchunk):
+                ?>
+                <div class="carousel-item <?php echo $ridx === 0 ? 'active' : ''; ?>">
+                    <div class="row g-4 justify-content-center">
+                        <?php foreach ($rchunk as $rev): ?>
+                        <div class="col-12 col-md-4">
+                            <div class="review-card text-center shadow-sm p-4 h-100">
+                                <div class="mb-3">
+                                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                                        <i class="bi bi-star<?php echo $i <= $rev['rating'] ? '-fill' : ''; ?> text-warning fs-5"></i>
+                                    <?php endfor; ?>
+                                </div>
+                                <p class="mb-3">"<?php echo htmlspecialchars(mb_substr($rev['text'], 0, 100)); ?>"</p>
+                                <hr>
+                                <h3 class="h6 fw-bold mb-0"><?php echo htmlspecialchars($rev['customer_name']); ?></h3>
+                                <small class="text-muted"><?php echo date('d.m.Y', strtotime($rev['created_at'])); ?></small>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
+                <?php endforeach; ?>
             </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
         </div>
-        <a href="reviews.php" class="btn w-100 but mt-4">Все отзывы</a>
+
+        <div class="text-center mt-4">
+            <a href="reviews.php" class="btn btn-modern">Все отзывы</a>
+        </div>
     </div>
 </section>
 
@@ -290,53 +246,35 @@ if (empty($portfolio_items)) {
                 <h3 class="h4 fw-bold mb-4">SR-<span class="text-warning">Studio</span></h3>
                 <p class="mb-4 opacity-90">Веб-студия в Ярославле. Создаем современные сайты которые приносят клиентов 24/7.</p>
                 <div class="social-icons">
-                    <a href="https://t.me/sr_studio" title="Telegram" class="social-icon">
-                        <img src="Image/telegram.png" alt="Telegram" width="24" height="24">
-                    </a>
-                    <a href="https://vk.com/sr_studio" title="ВКонтакте" class="social-icon">
-                        <img src="Image/vk.png" alt="ВКонтакте" width="24" height="24">
-                    </a>
-                    <a href="https://instagram.com/sr_studio" title="Instagram" class="social-icon">
-                        <img src="Image/Instagram.png" alt="Instagram" width="24" height="24">
-                    </a>
+                    <a href="https://t.me/sr_studio"><img src="Image/telegram.png" alt="Telegram" width="24"></a>
+                    <a href="https://vk.com/sr_studio"><img src="Image/vk.png" alt="ВКонтакте" width="24"></a>
+                    <a href="https://instagram.com/sr_studio"><img src="Image/Instagram.png" alt="Instagram" width="24"></a>
                 </div>
             </div>
             <div class="col-lg-2 col-md-6">
-                <h4 class="h6 fw-bold mb-3">Услуги</h4>
+                <h6 class="fw-bold mb-3">Услуги</h6>
                 <ul class="list-unstyled">
-                    <li><a href="#services" class="text-white-50 text-decoration-none py-1 d-block small">Дизайн сайтов</a></li>
-                    <li><a href="#services" class="text-white-50 text-decoration-none py-1 d-block small">Разработка</a></li>
-                    <li><a href="#services" class="text-white-50 text-decoration-none py-1 d-block small">SEO-продвижение</a></li>
+                    <li><a href="services.php" class="text-white-50 text-decoration-none">Дизайн сайтов</a></li>
+                    <li><a href="services.php" class="text-white-50 text-decoration-none">Разработка</a></li>
+                    <li><a href="services.php" class="text-white-50 text-decoration-none">SEO-продвижение</a></li>
                 </ul>
             </div>
             <div class="col-lg-3 col-md-6">
-                <h4 class="h6 fw-bold mb-3">Контакты</h4>
-                <div class="mb-3">
-                    <a href="tel:+79611626650" class="text-white d-flex align-items-center mb-2 text-decoration-none">
-                        <i class="bi bi-telephone-fill me-2"></i>+7 961 162 66 50
-                    </a>
-                    <a href="mailto:maxkryukovsky@gmail.com" class="text-white d-flex align-items-center text-decoration-none">
-                        <i class="bi bi-envelope-fill me-2"></i>maxkryukovsky@gmail.com
-                    </a>
-                </div>
-                <p class="text-white-50 small mb-0"><i class="bi bi-geo-alt-fill me-1"></i>г. Ярославль</p>
+                <h6 class="fw-bold mb-3">Контакты</h6>
+                <a href="tel:+79611626650" class="text-white-50 d-block"><i class="bi bi-telephone-fill me-2"></i>+7 961 162 66 50</a>
+                <a href="mailto:maxkryukovsky@gmail.com" class="text-white-50 d-block"><i class="bi bi-envelope-fill me-2"></i>maxkryukovsky@gmail.com</a>
+                <p class="text-white-50 small mt-2"><i class="bi bi-geo-alt-fill me-1"></i>г. Ярославль</p>
             </div>
             <div class="col-lg-3 col-md-6">
-                <h4 class="h6 fw-bold mb-3">Цены</h4>
-                <div class="mb-3">
-                    <p class="text-white-50 small mb-1">от 25 000 ₽</p>
-                    <p class="text-white-50 small mb-0">Сайты под ключ</p>
-                </div>
+                <h6 class="fw-bold mb-3">Цены</h6>
+                <p class="text-white-50 small">от 25 000 ₽</p>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12 mt-4">
-                <div class="text-center text-white-50 small">
-                    © 2026 SR-Studio. Все права защищены.
-                </div>
-            </div>
-        </div>
+        <hr>
+        <div class="text-center text-white-50 small">© 2026 SR-Studio</div>
     </div>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

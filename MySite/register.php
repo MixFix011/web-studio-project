@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -224,23 +225,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('contactForm');
-            const submitBtn = document.getElementById('submitBtn');
-            const formContent = document.getElementById('formContent');
-            const successMessage = document.getElementById('successMessage');
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const navbarToggler = document.querySelector('.navbar-toggler');
+        const navbarCollapse = document.querySelector('.navbar-collapse');
+        
+        if (navbarToggler && navbarCollapse) {
+            navbarToggler.addEventListener('click', function() {
+                navbarCollapse.classList.toggle('show');
+            });
+            
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+            navLinks.forEach(function(link) {
+                link.addEventListener('click', function() {
+                    navbarCollapse.classList.remove('show');
+                });
+            });
+        }
+        
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formContent = document.getElementById('formContent');
+        const successMessage = document.getElementById('successMessage');
 
+        if (document.getElementById('agree')) {
             document.getElementById('agree').addEventListener('change', function () {
                 submitBtn.disabled = !this.checked;
             });
+        }
 
-            ['name', 'phone', 'email', 'service', 'message'].forEach(function(id) {
-                document.getElementById(id).addEventListener('input', function() {
+        ['name', 'phone', 'email', 'service', 'message'].forEach(function(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', function() {
                     this.classList.remove('is-invalid');
                 });
-            });
+            }
+        });
 
+        if (form) {
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
 
@@ -251,7 +274,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 const formData = new FormData(form);
                 const spinner = submitBtn.querySelector('.spinner-border');
-                spinner.classList.remove('d-none');
+                if (spinner) spinner.classList.remove('d-none');
                 submitBtn.disabled = true;
 
                 fetch(window.location.href, {
@@ -265,9 +288,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         successMessage.classList.remove('d-none');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     } else {
-                        if (data.errors.db) {
+                        if (data.errors && data.errors.db) {
                             alert('Ошибка сервера, попробуйте позже');
-                        } else {
+                        } else if (data.errors) {
                             for (const field in data.errors) {
                                 const el = document.getElementById(field);
                                 if (el) {
@@ -282,19 +305,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     alert('Ошибка соединения, попробуйте позже');
                 })
                 .finally(() => {
-                    spinner.classList.add('d-none');
+                    if (spinner) spinner.classList.add('d-none');
                 });
             });
-        });
-
-        function resetForm() {
-            document.getElementById('formContent').classList.remove('d-none');
-            document.getElementById('successMessage').classList.add('d-none');
-            document.getElementById('contactForm').reset();
-            document.getElementById('contactForm').classList.remove('was-validated');
-            document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-            document.getElementById('submitBtn').disabled = true;
         }
-    </script>
+    });
+
+    function resetForm() {
+        const formContent = document.getElementById('formContent');
+        const successMessage = document.getElementById('successMessage');
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        if (formContent) formContent.classList.remove('d-none');
+        if (successMessage) successMessage.classList.add('d-none');
+        if (form) {
+            form.reset();
+            form.classList.remove('was-validated');
+        }
+        document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+        if (submitBtn) submitBtn.disabled = true;
+    }
+</script>
 </body>
 </html>
